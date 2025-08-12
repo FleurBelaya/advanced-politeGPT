@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>FastAPI Client</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input, button { padding: 8px; margin: 5px; }
+        #chat { border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: auto; }
+        .msg { margin-bottom: 5px; }
+        .user { color: blue; }
+        .server { color: green; }
+    </style>
+</head>
+<body>
+    <h2>Клиент для FastAPI</h2>
+    <div id="chat"></div>
+    <input type="text" id="message" placeholder="Введите ID пользователя">
+    <button onclick="sendMessage()">Отправить</button>
+
+    <script>
+        const API_URL = "http://localhost:8000"; // твой бэкенд
+
+        function sendMessage() {
+            let id = document.getElementById("message").value;
+
+            fetch(`${API_URL}/users/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    let chat = document.getElementById("chat");
+                    chat.innerHTML += `<div class="msg user">Вы: ${id}</div>`;
+                    chat.innerHTML += `<div class="msg server">Ответ: ${JSON.stringify(data)}</div>`;
+                    chat.scrollTop = chat.scrollHeight;
+                })
+                .catch(err => alert("Ошибка: " + err));
+
+            document.getElementById("message").value = "";
+        }
+    </script>
+</body>
+</html>
