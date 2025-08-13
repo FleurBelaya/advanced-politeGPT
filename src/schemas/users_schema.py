@@ -1,14 +1,25 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
-class User(BaseModel):
+class UserBase(BaseModel):
     name: str
-    email: EmailStr
+    description: str
+    price: int
 
 
-fake_users = {
-    1: {"username": "john_doe", "email": "john@example.com"},
-    2: {"username": "jane_smith", "email": "jane@example.com"},
-    3: {"username": "alice_jones", "email": "alice@example.com"},
-    4: {"username": "bob_white", "email": "bob@example.com"},
-}
+class UserCreate(UserBase):
+    pass
+
+
+class UserUpdate(UserCreate):
+    pass
+
+
+class UserUpdatePartial(UserCreate):
+    username: str | None = None
+    email: EmailStr | None = None
+
+
+class User(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
