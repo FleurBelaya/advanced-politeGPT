@@ -1,13 +1,14 @@
-import datetime
-from typing import Optional, Annotated
-from sqlalchemy import TIMESTAMP, Enum, Table, Column, Integer, String, MetaData, ForeignKey, func, text
+from sqlalchemy import Column, String
 from sqlalchemy.orm import Mapped, mapped_column
-from src.database import Base
-import enum
+from pydantic import EmailStr
 
-class WorkersOrm(Base):
+from .base import Base
+
+class UsersOrm(Base):
+    __tablename__ = "Users"
     __table_args__ = {"schema": "public"}
-    __tablename__ = 'workers'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str]
+    # Колонки базы данных
+    username: Mapped[str] = mapped_column(String(50), nullable=False)
+    email: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
+
